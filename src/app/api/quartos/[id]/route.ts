@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { quartosRepository } from "@/lib/repositories/quartos-repository";
+import { quartosRepository } from "@/modules/quartos/repository/quartos-repository";
 
 type Params = { params: Promise<{ id: string }> };
 

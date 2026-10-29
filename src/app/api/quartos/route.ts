@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { quartosRepository } from "@/lib/repositories/quartos-repository";
+import { quartosRepository } from "@/modules/quartos/repository/quartos-repository";
 
 export async function GET() {
   const dados = await quartosRepository.listar();

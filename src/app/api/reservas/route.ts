@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { reservasRepository } from "@/lib/repositories/reservas-repository";
+import { reservasRepository } from "@/modules/reservas/repository/reservas-repository";
 
 export async function GET() {
   const dados = await reservasRepository.listar();

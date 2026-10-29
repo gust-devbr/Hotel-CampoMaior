@@ -1,6 +1,6 @@
 # Hotel Campo Maior — Sistema de Reservas (protótipo)
 
-Protótipo funcional do sistema de reservas descrito no *Documento de Visão*
+Protótipo funcional do sistema de reservas descrito no _Documento de Visão_
 do Hotel Campo Maior (BytePower). Usa **dados fictícios** e foi estruturado
 para que um back-end real (API externa e/ou banco de dados) possa ser
 plugado depois, sem redesenhar o front-end.
@@ -59,37 +59,34 @@ src/
   app/
     api/<entidade>/route.ts          # GET (lista) + POST (cria)
     api/<entidade>/[id]/route.ts     # GET/PATCH/DELETE de um registro
-    <entidade>/page.tsx              # páginas de cada módulo
-    page.tsx                         # painel (dashboard)
-    layout.tsx                       # layout raiz (sidebar + header)
+    (hotel)/                         # grupo visual; não altera as URLs
+      <entidade>/page.tsx            # páginas dos módulos
+      page.tsx                       # painel (dashboard)
+      layout.tsx                     # sidebar + header
+    layout.tsx                       # layout raiz e QueryProvider
     globals.css                      # tema Tailwind v4 (shadcn tokens)
 
   components/
     ui/                              # componentes shadcn (button, table, dialog...)
     data-table/data-table.tsx        # tabela genérica (TanStack Table)
     layout/                          # sidebar e header
-    entities/<entidade>/             # colunas, tabelas e diálogos por entidade
     dashboard/                       # cards de indicadores
     providers/query-provider.tsx     # QueryClientProvider
 
-  hooks/
-    use-hospedes.ts, use-quartos.ts, use-reservas.ts,
-    use-hospedagens.ts, use-pagamentos.ts    # hooks do React Query (query + mutation)
+  modules/<entidade>/
+    components/                      # colunas, tabelas e diálogos do domínio
+    hooks/                            # hooks do React Query
+    repository/                       # acesso aos dados (hoje, arrays em memória)
+    types/                            # tipos específicos do domínio
 
   lib/
-    types.ts                         # modelo de domínio (fonte da verdade)
+    types.ts                         # reexporta tipos dos módulos e ApiError
     api-client.ts                    # wrapper de fetch usado pelos hooks
     query-keys.ts                    # chaves de cache centralizadas
     utils.ts                         # helpers (cn, formatCurrency, formatDate...)
     data/
       mock-db.ts                     # "banco de dados" em memória (dados fictícios)
       helpers.ts                     # latência simulada + geração de ids
-    repositories/
-      hospedes-repository.ts
-      quartos-repository.ts
-      reservas-repository.ts
-      hospedagens-repository.ts
-      pagamentos-repository.ts
 ```
 
 ### Como plugar uma API/banco de dados real no futuro
@@ -99,12 +96,12 @@ O projeto já está dividido em camadas justamente para isolar essa mudança:
 1. **Camada de dados (`src/lib/data/mock-db.ts`)** — hoje são arrays em
    memória. Quando houver um banco (Postgres, MySQL, SQLite...), esse
    arquivo deixa de existir.
-2. **Camada de repositório (`src/lib/repositories/*`)** — é a **única**
+2. **Camada de repositório (`src/modules/*/repository/*`)** — é a **única**
    camada que precisa ser reescrita. Cada função (`listar`, `criar`,
    `atualizar`, `registrarCheckin`, etc.) mantém a mesma assinatura, mas
    passa a chamar um ORM (Prisma/Drizzle) ou um cliente SQL em vez do array
    em memória.
-3. **Rotas de API (`src/app/api/**`)** — já seguem o contrato REST
+3. **Rotas de API (`src/app/api/**`)\*\* — já seguem o contrato REST
    convencional (GET/POST/PATCH/DELETE, corpo JSON, códigos de status) e não
    precisam mudar, pois só chamam o repositório.
 4. **Front-end (hooks do React Query + páginas)** — não precisa mudar em
@@ -115,9 +112,8 @@ rotas internas do Next.js), basta apontar `NEXT_PUBLIC_API_BASE_URL` (usada
 em `src/lib/api-client.ts`) para a nova URL-base — nenhum hook ou componente
 precisa ser alterado.
 
-Os tipos em `src/lib/types.ts` já refletem o modelo conceitual descrito no
-Documento de Visão (Hóspede, Quarto, Reserva, Hospedagem, Pagamento) e podem
-servir de base direta para um schema Prisma/SQL.
+Os tipos vivem junto dos módulos em `src/modules/*/types/`; `src/lib/types.ts`
+mantém reexports para consumidores compartilhados e compatibilidade.
 
 ## Observações
 

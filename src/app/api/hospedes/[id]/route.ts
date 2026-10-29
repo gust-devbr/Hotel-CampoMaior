@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { hospedesRepository } from "@/lib/repositories/hospedes-repository";
+import { hospedesRepository } from "@/modules/hospedes/repository/hospedes-repository";
 
 type Params = { params: Promise<{ id: string }> };
 

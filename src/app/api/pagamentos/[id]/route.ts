@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { pagamentosRepository } from "@/lib/repositories/pagamentos-repository";
+import { pagamentosRepository } from "@/modules/pagamentos/repository/pagamentos-repository";
 
 type Params = { params: Promise<{ id: string }> };
 

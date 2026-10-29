@@ -9,10 +9,9 @@ import type {
 /**
  * "Banco de dados" em memória, usado apenas para fins de demonstração.
  *
- * Este arquivo é o ÚNICO lugar que precisa mudar quando um banco de dados
- * real (Postgres, MySQL, SQLite, etc.) for adotado: os repositórios em
- * `src/lib/repositories` importam os arrays abaixo, então basta trocar essas
- * funções por chamadas ao Prisma/Drizzle/SQL mantendo as mesmas assinaturas.
+ * Os repositórios em `src/modules/<entidade>/repository` importam os arrays
+ * abaixo. Quando um banco real for adotado, essas funções passam a consultar
+ * o banco mantendo as mesmas assinaturas.
  *
  * Os dados existem apenas no processo do servidor Next.js e são reiniciados
  * a cada reinício do servidor (`npm run dev`).

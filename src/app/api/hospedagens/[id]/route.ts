@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { hospedagensRepository } from "@/lib/repositories/hospedagens-repository";
+import { hospedagensRepository } from "@/modules/hospedagens/repository/hospedagens-repository";
 
 type Params = { params: Promise<{ id: string }> };
 

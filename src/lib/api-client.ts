@@ -24,8 +24,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const error = (await response.json().catch(() => ({}))) as Partial<ApiError>;
-    throw new Error(error.message ?? `Erro ao chamar ${path} (${response.status})`);
+    const error = (await response
+      .json()
+      .catch(() => ({}))) as Partial<ApiError>;
+    throw new Error(
+      error.message ?? `Erro ao chamar ${path} (${response.status})`,
+    );
   }
 
   if (response.status === 204) return undefined as T;
